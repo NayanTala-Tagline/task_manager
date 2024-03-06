@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_manager/src/data/datasources/local/local_data_source.dart';
+import 'package:task_manager/src/data/repositories/task_repository_impl.dart';
+import 'package:task_manager/src/domain/repositories/task_repository.dart';
+import 'package:task_manager/src/domain/usecases/add_task_usecase.dart';
+import 'package:task_manager/src/domain/usecases/delete_task_usecase.dart';
+import 'package:task_manager/src/domain/usecases/fetch_task_usecase.dart';
+import 'package:task_manager/src/presentation/bloc/task_bloc.dart';
+import 'package:task_manager/src/presentation/pages/task_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,28 +19,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    TaskRepository repository = TaskRepositoryImpl(LocalDataSourceImpl());
+    return BlocProvider<TaskBloc>(
+      create: (context) => TaskBloc(
+        AddTaskUseCase(repository),
+        DeleteTaskUseCase(repository),
+        FetchTasksUseCase(repository),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff1E346F)),
+          useMaterial3: true,
+        ),
+        home: const TaskListScreen(title: "Task Manager"),
+      ),
     );
   }
 }
