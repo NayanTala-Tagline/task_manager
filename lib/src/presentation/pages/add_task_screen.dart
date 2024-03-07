@@ -65,7 +65,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   hineText: "Enter Description",
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter task title';
+                      return 'Please enter task description';
                     }
                     return null;
                   },

@@ -1,6 +1,6 @@
 part of 'task_bloc.dart';
 
-@immutable
+
 sealed class TaskEvent {
   final TaskEntity? taskEntity;
   final int? id;

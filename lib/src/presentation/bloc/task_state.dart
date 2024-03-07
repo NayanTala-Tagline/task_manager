@@ -1,6 +1,5 @@
 part of 'task_bloc.dart';
 
-@immutable
 sealed class TaskState {
   final List<TaskEntity>? tasks;
 
